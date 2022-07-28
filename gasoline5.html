@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Fuel Efficiency</title>
+
+    <script src='https://d3js.org/d3.v5.min.js'></script>
+    <style> .circle {fill: lightblue; stroke: black;} 
+            .highlight {fill: yellow; stroke: black;} 
+            .electricity {fill: green; stroke: white; opacity: 0.5;}
+            .diesel {fill: red; stroke: white; opacity: 0.5;}
+            .gasoline {fill: blue; stroke: white; opacity: 0.5;}
+            .val {stroke: purple;}
+            #tooltip {
+                opacity: 0;
+                position:  absolute;
+                text-align: left;
+                width: 150px; height: 60px;
+                background: white;
+                border: 0px;
+            }
+    </style>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body onload='init()'>
+<svg width=600 height=600 style="background-color:rgba(243, 250, 243, 0.986)">
+</svg>
+<!-- <div id="slider">
+<input type="range" name="mySlider" id="mySlider" min="0" max="7" value="0" step = "1">
+<label for="mySlider" id="number">EngineCylinders</label>
+</div> -->
+<div id="slider">
+<input type="range" name="mySlider" id=mySlider list="tickmarks" min="0" max="12" value="0" >
+<datalist id="tickmarks">
+<option value="0" label="0"></option>
+<option value="2"></option>
+<option value="3"></option>
+<option value="4"></option>
+<option value="6"></option>
+<option value="8" label="8"></option>
+<option value="10"></option>
+<option value="12"></option>
+</datalist>
+<label for="mySlider" id="number">EngineCylinders</label>
+</div>
+
+<div id="tooltip" opacity=0></div>
+<script>
+async function init() {
+
+const data = await d3.csv("https://flunky.github.io/cars2017.csv");
+const all_gas_data = data.filter((d) => (d.Fuel == "Gasoline")).slice().sort((a,b)=>d3.descending(a.AverageCityMPG, b.AverageCityMPG));
+
+
+d3.select("#mySlider")
+    .on("change", function(){
+    selectedValue = this.value;
+    console.log(selectedValue);
+    if (selectedValue == 0){
+        d3.select("#number")
+        .html("EngineCylinders: All");
+    } else {
+        d3.select("#number")
+            .html("EngineCylinders: " + selectedValue);
+    }
+    if (d3.set([0,2,3,4,6,8,10,12]).has(selectedValue)){
+        updateChart(selectedValue);
+    }
+});
+
+// X range
+var x = d3.scaleLog().domain([10,40]).range([0,500]);
+// Y range
+var y = d3.scaleLog().domain([10,150]).range([500,0]);
+
+var tooltip = d3.select("#tooltip");
+
+var svg = d3.select("body")
+            .select("svg");
+
+var rightArrow = svg.append("g")
+    .attr("transform", "translate(550,250) scale(0.5, 1.0)")
+    .attr("class", "rightArrow")
+    .append("a")
+    .attr("xlink:href", "diesel2.html")
+    .append("path")
+    .attr("d", "M 20 0 L 30 0 L 60 30 L 30 60 L20 60 L 50 30 Z")
+    .attr("fill", "lightgrey")
+    .attr("cursor", "pointer")
+    .on("mouseover", function() {
+        console.log("I was hovered over.");
+        d3.select(this)
+        .attr("fill", "orange");
+    })
+    .on("mouseout", function() {
+        console.log("I was not hovered over.");
+        d3.select(this)
+        .attr("fill", "lightgrey");
+    });
+
+var leftArrow = svg.append("g")
+    .attr("transform", "translate(50,310) scale(0.5, 1.0) rotate(180)")
+    .attr("class", "leftArrow")
+    .append("a")
+    .attr("xlink:href", "fuelefficiency4.html")
+    .append("path")
+    .attr("d", "M 20 0 L 30 0 L 60 30 L 30 60 L20 60 L 50 30 Z")
+    .attr("fill", "lightgrey")
+    .attr("cursor", "pointer")
+    .on("mouseover", function() {
+        console.log("I was hovered over.");
+        d3.select(this)
+        .attr("fill", "orange");
+    })
+    .on("mouseout", function() {
+        console.log("I was not hovered over.");
+        d3.select(this)
+        .attr("fill", "lightgrey");
+    });
+
+var length = 500 / all_gas_data.length;
+svg.append("g")
+   .attr("transform", "translate(50,50)")
+   .attr("class", "draw")
+   .selectAll("rect")
+   .data(all_gas_data)
+   .enter()
+   .append("rect")
+   .attr("width", function (d) { return x(d.AverageCityMPG) + 2; })
+   .attr("height", length)
+   .attr("class", "gasoline")
+   .attr("x", 0 )
+   .attr("y", function (d, i) { return i * length; })
+   .on("mouseover", mouseover)
+   .on("mouseout", mouseout);
+
+function mouseover(d, i) {
+    d3.select(this)
+        .attr("class", "highlight");
+
+    tooltip.style("opacity", 1)
+            .style("left", (d3.event.pageX)+"px")
+            .style("top", (d3.event.pageY)+"px")
+            .html("Make: " + d.Make + "<br/> Fuel: " + d.Fuel + "<br/> City mpg: " + d.AverageCityMPG);
+}
+
+function mouseout(d, i) {
+    d3.select(this)
+        .attr("class", (d) => {
+            if (d.Fuel == 'Electricity') {
+                return "electricity";
+            } else if (d.Fuel == 'Diesel') {
+                return "diesel";
+            } else if (d.Fuel == 'Gasoline') {
+                return "gasoline";
+            } else {
+                return "circle";
+            }
+        });
+    
+    tooltip.style("opacity", 0)
+}
+
+function updateChart(number) {
+    if (number == 0){
+        gas_data = all_gas_data;
+    } else {
+        gas_data = all_gas_data.filter((d) => (d.EngineCylinders == number)).slice().sort((a,b)=>d3.descending(a.AverageCityMPG, b.AverageCityMPG));
+    }
+    console.log(gas_data.length);
+    length = 500 / gas_data.length;
+
+    var u = d3.select("svg")
+                .select(".draw")
+                .selectAll("rect")
+                .data(gas_data)
+    u.enter()
+        .append("rect")
+        .merge(u)
+        .transition()
+        .delay(100)
+        .duration(1000)
+        .attr("width", function (d) { return x(d.AverageCityMPG) + 5; })
+        .attr("height", length)
+        .attr("class", "gasoline")
+        .attr("x", 0 )
+        .attr("y", function (d, i) { return i * length; });
+
+    u.exit()
+        .transition()
+        .duration(1000)
+        .style("opacity", 0)
+        .remove()
+
+    d3.select("svg")
+        .select(".draw")
+        .selectAll("rect")
+        .on("mouseover", mouseover)
+        .on("mouseout", mouseout);
+
+    console.log(gas_data);
+    console.log(length);
+
+    if (number != 0){
+        var t = d3.select("svg")
+            .select(".draw")
+            .selectAll("text")
+            .data(gas_data)
+
+        t.enter()
+            .append("text")
+            .merge(t)
+            .transition()
+            .duration(1000)
+            .attr("x", function (d) { return x(d.AverageCityMPG); })
+            .attr("y", function (d, i) { return (500*i/gas_data.length) + length*0.5 + 2; })
+            .attr("dy", ".05em")
+            .text(function (d) { return d.Make; })
+            .attr("text-anchor", "end")
+            .style("fill", "orange")
+            .style("font-size", "10px")
+
+        t.exit()
+            .transition()
+            .duration(100)
+            .remove()
+    } else {
+        d3.select("svg")
+            .select(".draw")
+            .selectAll("text")
+            .remove();
+    }
+}
+
+svg.append("text")
+    .attr("x", 450)
+    .attr("y", 585)
+    .attr("text-anchor", "end")
+    .attr("stroke", "black")
+    .text("Average City MPG")
+
+svg.append("g")
+    .attr("transform", "translate(50,550)")
+    .call(d3.axisBottom(x)
+    .tickValues([10,20,30,40])  
+    .tickFormat(d3.format("~s")));
+
+svg.append("text")
+    .attr("transform", "rotate(-90)")
+    .attr("x", -150)
+    .attr("y", 100)
+    .attr("dy", "-5.1em")
+    .attr("text-anchor", "end")
+    .attr("stroke", "black")
+    .text("Make");
+
+svg.append("text")
+    .attr("x", 220)
+    .attr("y", 40)
+    .attr("font-size", "24px")
+    .attr("stroke", "black")
+    .text("Gasoline Engines");
+
+}
+
+</script>
+</body>
+</html>
