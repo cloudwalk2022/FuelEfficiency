@@ -158,17 +158,17 @@ svg.append("text")
 var legend1 = svg.append("g")
     .attr("transform", "translate(60,80)")
     
-legend1.append("rect")
+legend1.append("circle")
     .attr("class", "gasoline")
-    .attr("width", 10)
-    .attr("height", 10)
+    .attr("r", 6)
+    .style("stroke", "black")
    
 legend1.append("a")
     .attr("xlink:href", "gasoline.html")
     .append("text")
-    .attr("x", 15)
+    .attr("x", 10)
     .attr("y", 11)
-    .attr("dy", "-0.05em")
+    .attr("dy", "-0.4em")
     .attr("cursor", "pointer")
     .text("Gasoline")
     .on("click", function() {
@@ -177,40 +177,40 @@ legend1.append("a")
     });
     
 var legend2 = svg.append("g")
-.attr("transform", "translate(140,80)")
+    .attr("transform", "translate(150,80)")
 
-legend2.append("rect")
-.attr("class", "diesel")
-.attr("width", 10)
-.attr("height", 10)
+legend2.append("circle")
+    .attr("class", "diesel")
+    .attr("r", 6)
+    .style("stroke", "black")
 
 legend2.append("a")
-.attr("xlink:href", "diesel.html")
-.append("text")
-.attr("x", 15)
-.attr("y", 11)
-.attr("dy", "-0.05em")
-.attr("cursor", "pointer")
-.text("Diesel")
-.on("click", function() {
-    d3.select(this)
-    .attr("stroke", "black");
-});
+    .attr("xlink:href", "diesel.html")
+    .append("text")
+    .attr("x", 10)
+    .attr("y", 11)
+    .attr("dy", "-0.4em")
+    .attr("cursor", "pointer")
+    .text("Diesel")
+    .on("click", function() {
+        d3.select(this)
+        .attr("stroke", "black");
+    });
    
 var legend3 = svg.append("g")
-    .attr("transform", "translate(220,80)")
+    .attr("transform", "translate(240,80)")
     
-legend3.append("rect")
+legend3.append("circle")
     .attr("class", "electricity")
-    .attr("width", 10)
-    .attr("height", 10)
+    .attr("r", 6)
+    .style("stroke", "black")
    
 legend3.append("a")
     .attr("xlink:href", "electricity.html")
     .append("text")
-    .attr("x", 15)
+    .attr("x", 10)
     .attr("y", 11)
-    .attr("dy", "-0.05em")
+    .attr("dy", "-0.4em")
     .attr("cursor", "pointer")
     .text("Electricity")
     .on("click", function() {
@@ -222,7 +222,6 @@ svg.append("path")
     .attr("d", "M 50 460 L 550 90")
     .attr("stroke", "grey")
     .attr("stroke-dasharray", (5,5))
-
 
 // Features of the annotations
 const annotations1 = [
