@@ -25,6 +25,7 @@
 <body onload='init()'>
 <svg width=600 height=600 style="background-color:rgba(243, 250, 243, 0.986)">
 </svg>
+<p style="margin-top:0em">Data Source: https://flunky.github.io/cars2017.csv</p>
 <div id="tooltip" opacity=0></div>
 <script>
 async function init() {
@@ -148,11 +149,11 @@ svg.append("text")
 
 // Chart title
 svg.append("text")
-    .attr("x", 220)
+    .attr("x", 120)
     .attr("y", 40)
     .attr("font-size", "24px")
     .attr("stroke", "black")
-    .text("Fuel Efficiency");
+    .text("Fuel Efficiency for Vehicles in 2017");
 
 // Add legend
 var legend1 = svg.append("g")
