@@ -259,6 +259,23 @@ const annotations2 = [
 }
 ]
 
+const annotations3 = [
+{
+    note: {
+    label: "Gas and diesel engine vehicles have lower MPG performance than electrical vehicles. Here larger circles represent more engine cycliners.",
+    title: "Average city MPG ranges from 10 to 39.",
+    align: "left",
+    wrap: 220,
+    padding: 3
+    },
+    color: "darkslategrey",
+    x: 190,
+    y: 380,
+    dy: 60,
+    dx: 60
+}
+]
+
 // Add annotations to the chart
 var makeAnnotations = d3.annotation().annotations(annotations1)
 svg.append("g")
@@ -268,7 +285,10 @@ makeAnnotations = d3.annotation().annotations(annotations2)
 svg.append("g")
     .style("font-size", "12px")
     .call(makeAnnotations)
-
+makeAnnotations = d3.annotation().annotations(annotations3)
+svg.append("g")
+    .style("font-size", "12px")
+    .call(makeAnnotations)
 }
 
 </script>
