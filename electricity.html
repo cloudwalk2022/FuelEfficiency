@@ -23,7 +23,7 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body onload='init()'>
-<svg width=600 height=600 style="background-color:rgba(243, 250, 243, 0.986)">
+<svg width=700 height=600 style="background-color:rgba(243, 250, 243, 0.986)">
 </svg>
 
 <div id="tooltip" opacity=0></div>
@@ -64,7 +64,7 @@ var svg = d3.select("body")
 
 // Right navigation arrow
 var rightArrow = svg.append("g")
-    .attr("transform", "translate(550,250) scale(0.5, 1.0)")
+    .attr("transform", "translate(650,250) scale(0.5, 1.0)")
     .attr("class", "rightArrow")
     .append("a")
     .attr("xlink:href", "index.html")
@@ -170,10 +170,10 @@ const annotations = [
         padding: 3
         },
         color: "darkslategrey",
-        x: x(all_electricity_data[0].AverageCityMPG)-70,
-        y: 55,
-        dy: 0,
-        dx: 0
+        x: x(all_electricity_data[0].AverageCityMPG)+45,
+        y: length/2+50,
+        dy: 30,
+        dx: 30
     }
     ]
 

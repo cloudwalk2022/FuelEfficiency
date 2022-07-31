@@ -23,7 +23,7 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body onload='init()'>
-<svg width=600 height=600 style="background-color:rgba(243, 250, 243, 0.986)">
+<svg width=700 height=600 style="background-color:rgba(243, 250, 243, 0.986)">
 </svg>
 
 <!-- Add slider -->
@@ -34,7 +34,7 @@
 <option value="4"></option>
 <option value="6"></option>
 </datalist>
-<label for="mySlider" id="number">EngineCylinders: All</label>
+<label for="mySlider" id="number">Number of Engine Cylinders: All</label>
 </div>
 
 <div id="tooltip" opacity=0></div>
@@ -52,10 +52,10 @@ d3.select("#mySlider")
     selectedValue = this.value;
     if (selectedValue == 0){
         d3.select("#number")
-        .html("EngineCylinders: All");
+        .html("Number of Engine Cylinders: All");
     } else {
         d3.select("#number")
-            .html("EngineCylinders: " + selectedValue);
+            .html("Number of Engine Cylinders: " + selectedValue);
     }
     if (d3.set([0,4,6]).has(selectedValue)){
         updateChart(selectedValue);
@@ -74,7 +74,7 @@ var svg = d3.select("body")
 
 // Right navigation arrow
 var rightArrow = svg.append("g")
-    .attr("transform", "translate(550,250) scale(0.5, 1.0)")
+    .attr("transform", "translate(650,250) scale(0.5, 1.0)")
     .attr("class", "rightArrow")
     .append("a")
     .attr("xlink:href", "electricity.html")
@@ -180,10 +180,10 @@ const annotations = [
         padding: 3
         },
         color: "darkslategrey",
-        x: x(all_diesel_data[0].AverageCityMPG)-68,
-        y: 55,
-        dy: 0,
-        dx: 0
+        x: x(all_diesel_data[0].AverageCityMPG)+50,
+        y: length/2+50,
+        dy: 30,
+        dx: 30
     }
     ]
 
@@ -271,10 +271,10 @@ function updateChart(number) {
         padding: 3
         },
         color: "darkslategrey",
-        x: x(diesel_data[0].AverageCityMPG)-68,
-        y: 55,
-        dy: 0,
-        dx: 0
+        x: x(diesel_data[0].AverageCityMPG)+50,
+        y: length/2+50,
+        dy: 30,
+        dx: 30
     }
     ]
 

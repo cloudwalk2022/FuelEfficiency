@@ -1,7 +1,10 @@
 body {
     animation: fadeIn 0.5s;
 }
-
+#number {
+    color: blue;
+    font-weight: bold;
+  }
 @keyframes transitionInX {
     from {
         opacity: 0;
